@@ -14,6 +14,22 @@ mkdir -p $sync_path
 echo "Syncing the contents of: $target_bucket to: $sync_path"
 aws s3 sync $target_bucket $sync_path
 
+if [ $? -eq 0 ]; then
+  echo "S3 to local sync finished"
+  if [ -d $sync_path/etc/yum.repos.d ]; then
+      echo "Using the repo configs from $target_bucket/etc/yum.repos.d"
+      rm /etc/yum.repos.d/*
+      mv $sync_path/etc/yum.repos.d/* /etc/yum.repos.d
+  else
+    # since this is S3 and it's object based
+    # if there's no directory on that path, there's no files either.
+    echo "No repo files found in  $target_bucket/etc/yum.repos.d, exiting"
+    exit 1
+  fi
+else
+  echo "Error while syncing, exiting"
+  exit 1
+fi
 
 echo "Comparing and syncing repos..."
 
@@ -25,5 +41,12 @@ done
 
 echo "Syncing updated repos to: $target_bucket"
 aws s3 sync $sync_path $target_bucket
-echo "Finished syncing, exiting"
-exit 0
+
+if [ $? -eq 0 ]; then
+  echo "Sync to S3 finished, exiting"
+  exit 0
+else
+  echo "Error while syncing, exiting"
+  exit 1
+fi
+
