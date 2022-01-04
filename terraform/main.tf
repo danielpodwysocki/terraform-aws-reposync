@@ -67,7 +67,9 @@ resource "aws_ecs_task_definition" "aws-reposync" {
 
 resource "aws_s3_bucket" "aws-reposync" {
   acl = "private"
-
+  # since all of this data can be easily recreated, 
+  # we want to delete it in case we're removing the application itself
+  force_destroy = true
   versioning {
     enabled = false
   }
