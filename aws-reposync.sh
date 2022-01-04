@@ -7,7 +7,6 @@
 # date: 2022-01
 echo "Target bucket: $target_bucket"
 sync_path="/tmp/sync"
-repos=$(ls /etc/yum.repos.d)
 echo "Syncing to $sync_path ..."
 mkdir -p $sync_path
 
@@ -33,6 +32,7 @@ fi
 
 echo "Comparing and syncing repos..."
 
+repos=$(ls /etc/yum.repos.d)
 for repo in $repos
 do
   repo_id=$(cat /etc/yum.repos.d/$repo | grep "\[" | sed -s "s/\[//g" | sed -s "s/\]//g")
