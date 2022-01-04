@@ -8,7 +8,7 @@
 
 sync_path="/tmp/sync"
 repos=$(ls /etc/yum.repos.d)
-
+echo "Syncing to $sync_path ..."
 mkdir -p $sync_path
 
 for repo in $repos
@@ -16,3 +16,6 @@ do
   repo_id=$(cat /etc/yum.repos.d/$repo | grep "\[" | sed -s "s/\[//g" | sed -s "s/\]//g")
   reposync -p $sync_path --download-metadata --repo=$repo_id
 done
+
+echo "Finished syncing, exiting"
+exit 0
