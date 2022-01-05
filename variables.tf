@@ -25,3 +25,8 @@ variable "vpc_id" {
 variable "create_s3_endpoint" {
   default = true
 }
+
+# route tables to add the S3 gateway endpoint route to
+variable "route_table_ids" {
+
+}

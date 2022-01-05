@@ -83,22 +83,6 @@ data "aws_iam_policy_document" "allow_aws-reposync" {
   }
 }
 
-data "aws_iam_policy_document" "allow_aws-reposync" {
-  statement {
-
-    actions = [
-      "s3:GetObject",
-      "s3:ListBucket",
-    ]
-
-    resources = [
-      aws_s3_bucket.aws-reposync.arn,
-      "${aws_s3_bucket.aws-reposync.arn}/*",
-    ]
-  }
-}
-
-
 resource "aws_cloudwatch_log_group" "aws-reposync" {
   name = "aws-reposync"
 
