@@ -1,14 +1,11 @@
-include:
-  - template: Terraform.latest.gitlab-ci.yml
-
-variables:
-  TF_STATE_NAME: default
-  TF_CACHE_KEY: default
-  TF_CLI_CONFIG_FILE: $CI_PROJECT_DIR/.terraformrc
-  TF_ROOT: ${CI_PROJECT_DIR}/terraform/
-
-before_script:
-  - echo -e "credentials \"$CI_SERVER_HOST\" {\n  token = \"$CI_JOB_TOKEN\"\n}" > $TF_CLI_CONFIG_FILE
+terraform-upload:
+  image: curlimages/curl:latest
+  stage: build
+  script:
+    - 'touch module.tgz' 
+    - 'tar -czf module.tgz terraform'
+    - 'curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file module.tgz "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/terraform/modules/aws/aws-reposync/0.0.1/module.tgz"'
+ 
 
 docker-build:
   # Use the official docker image.
