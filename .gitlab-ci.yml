@@ -1,3 +1,15 @@
+include:
+  - template: Terraform.latest.gitlab-ci.yml
+
+variables:
+  TF_STATE_NAME: default
+  TF_CACHE_KEY: default
+  TF_CLI_CONFIG_FILE: $CI_PROJECT_DIR/.terraformrc
+  TF_ROOT: ${CI_PROJECT_DIR}/terraform/
+
+before_script:
+  - echo -e "credentials \"$CI_SERVER_HOST\" {\n  token = \"$CI_JOB_TOKEN\"\n}" > $TF_CLI_CONFIG_FILE
+
 docker-build:
   # Use the official docker image.
   image: docker:latest
@@ -24,3 +36,5 @@ docker-build:
     - if: $CI_COMMIT_BRANCH
       exists:
         - Dockerfile
+
+
