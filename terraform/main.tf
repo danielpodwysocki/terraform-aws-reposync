@@ -21,8 +21,12 @@ variable "region" {
 }
 
 # Path to a folder containing all of the repo files to be uploaded to /etc/yum.repos.d
-variable "repos_path"{
-  default = "/Users/daniel/workspace/aws-reposync/example/repos/"
+variable "repos_path" {
+
+}
+
+variable "vpc" {
+
 }
 
 resource "aws_ecs_cluster" "aws-reposync" {
@@ -72,6 +76,9 @@ resource "aws_s3_bucket" "aws-reposync" {
   force_destroy = true
   versioning {
     enabled = false
+  }
+  website {
+
   }
 
   tags = var.tags
@@ -146,9 +153,9 @@ resource "aws_cloudwatch_log_group" "aws-reposync" {
 # Upload the repo files to s3://{bucket}/etc/yum.repos.d
 resource "aws_s3_bucket_object" "repo_file" {
   for_each = fileset("${var.repos_path}", "*")
-  bucket = aws_s3_bucket.aws-reposync.id
-  key    = "etc/yum.repos.d/${each.value}"
-  source = "${var.repos_path}/${each.value}"
+  bucket   = aws_s3_bucket.aws-reposync.id
+  key      = "etc/yum.repos.d/${each.value}"
+  source   = "${var.repos_path}/${each.value}"
 
   etag = filemd5("${var.repos_path}/${each.value}")
 }
