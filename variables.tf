@@ -9,7 +9,7 @@ variable "subnets" {
 
 }
 variable "region" {
-  default = "eu-central-1"
+
 }
 
 # Path to a folder containing all of the repo files to be uploaded to /etc/yum.repos.d
@@ -17,6 +17,11 @@ variable "repos_path" {
 
 }
 # A VPC to deploy the repository in.
-variable "vpc" {
+variable "vpc_id" {
 
+}
+
+# boolean 
+variable "create_s3_endpoint" {
+  default = true
 }
