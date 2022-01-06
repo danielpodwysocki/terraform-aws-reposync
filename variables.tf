@@ -8,6 +8,12 @@ variable "tags" {
 variable "subnets" {
 
 }
+
+# A string in a cron format. Controls how often the sync runs
+variable "cron" {
+
+}
+
 variable "region" {
 
 }
